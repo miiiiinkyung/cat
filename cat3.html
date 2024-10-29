@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고양이 길들이기</title>
+    <style>
+        @font-face {
+            font-family: 'UhBeeSe_hyun';
+            src: url('https://gcore.jsdelivr.net/gh/projectnoonnu/noonfonts_five@.2.0/UhBeeSe_hyun.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'UhBeeSe_hyun', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #cat {
+            width: 1000px; /* 고양이 이미지 크기를 키움 */
+            position: relative;
+        }
+
+        .eye {
+            width: 30px;
+            height: 40px;
+            background-color: #f0f0f0;
+            border-radius: 50%;
+            position: absolute;
+            top: 120px;
+            margin-top: 260px;
+            margin-left: 360px;
+        }
+
+        .pupil {
+            width: 20px;
+            height: 20px;
+            background-color: black;
+            border-radius: 50%;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+
+        #left-eye {
+            left: 100px;
+        }
+
+        #right-eye {
+            left: 155px;
+        }
+
+        #catNameDisplay {
+            position: fixed;
+            top: 100px; /* 다이얼 아래 위치하도록 조정 */
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            color: #333;
+            z-index: 5; /* 다이얼 위에 표시되도록 */
+        }
+
+        .interaction-btn {
+            font-size: 1.5rem;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'UhBeeSe_hyun', sans-serif;
+            background-color: #ffdd57;
+            color: #333;
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .interaction-btn img {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
+
+        #interaction-panel {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+        }
+
+        #bonding-meter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 1.2rem;
+            color: #333;
+            background: #fff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #timer {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            font-weight: bold;
+            color: black;
+        }
+#first {
+    display: flex; /* Show the first element */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 30px;
+    border-radius: 50px; /* Border radius set to 50px */
+    text-align: center;
+    font-size: 2rem;
+    z-index: 100;
+}
+
+#startBtn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #ffdd57;
+    border: none;
+    border-radius: 50px; /* Border radius */
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+        #message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 2rem;
+            z-index: 10;
+        }
+
+        #retryBtn {
+            display: none;
+            margin-top: 120%;
+            font-size: 1.5rem;
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            background-color: #ffdd57;
+            color: #333;
+            font-family: 'UhBeeSe_hyun', sans-serif;
+        }
+
+        .bonding-increase {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -20px);
+            font-size: 1.5rem;
+            color: #ff5722;
+            opacity: 0;
+            animation: moveUp 1s ease-in-out;
+        }
+
+        @keyframes moveUp {
+            0% { opacity: 1; transform: translate(-50%, 0); }
+            100% { opacity: 0; transform: translate(-50%, -40px); }
+        }
+       #nextBtn {
+            display: none;
+            color: black;
+            background-color: rgba(255,255,255, 0.5);
+            border: none;
+            cursor: pointer;
+            border-radius: 50px;
+            font-family: 'UhBeeSe_hyun', sans-serif;
+            font-size: 2rem;
+            position: absolute;
+            width: 200px;
+            left: 85%;
+            top: 80%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div id="catNameDisplay"></div>
+    <div id="first">
+    30초 안에 고양이를 길들이세요!
+    <button id="startBtn" onclick="startGame()">시작하기</button>
+</div>
+
+    <div id="timer"></div>
+    <div id="bonding-meter">유대감: 0</div>
+
+    <div id="message"></div>
+    <button id="retryBtn" onclick="startGame()">다시 시도하기</button>
+    <div id="cat">
+    <img src="cat4.png" alt="고양이" style="width: 100%;">
+    </div>
+
+    <div id="cat_eye">
+        <div class="eye" id="left-eye">
+            <div class="pupil" id="left-pupil"></div>
+        </div>
+        <div class="eye" id="right-eye">
+            <div class="pupil" id="right-pupil"></div>
+        </div>
+    </div>
+
+    <div id="interaction-panel">
+        <button class="interaction-btn" onclick="startInteraction('food')">
+            <img src="fish.png" alt="fish"> 밥 주기
+        </button>
+        <button class="interaction-btn" onclick="startInteraction('pet')">
+            <img src="hand.png" alt="hand"> 쓰다듬기
+        </button>
+        <button class="interaction-btn" onclick="startInteraction('play')">
+            <img src="play.png" alt="play"> 놀아주기
+        </button>
+    </div>
+
+    <button id="nextBtn" style="display: none;">처음으로</button>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const catName = urlParams.get('name');
+
+    if (catName) {
+        document.getElementById('catNameDisplay').innerText = `${catName}을 길들이기에 도전하세요!`;
+    }
+
+    let bonding = 0;
+    let timer;
+    let timeLeft = 60;
+    const bondingMeter = document.getElementById('bonding-meter');
+    const message = document.getElementById('message');
+    const retryBtn = document.getElementById('retryBtn');
+    const timerDisplay = document.getElementById('timer');
+    const cat = document.getElementById('cat');
+    let lastPupilMovement = 0; // Track the last movement distance
+
+    function updateBonding(amount) {
+        bonding += amount;
+        bondingMeter.textContent = `유대감: ${bonding}`;
+        showBondingIncrease(amount);
+        checkBonding();
+    }
+
+    function showBondingIncrease(amount) {
+        const increaseText = document.createElement("div");
+        increaseText.className = "bonding-increase";
+        increaseText.textContent = `+${amount}`;
+        document.getElementById("cat").appendChild(increaseText);
+        setTimeout(() => increaseText.remove(), 1000);
+    }
+
+    function checkBonding() {
+        if (bonding >= 100) {
+            clearInterval(timer);
+            message.textContent = `${catName}을 길들이는데 성공하였습니다!`;
+            message.style.display = 'block';
+            retryBtn.style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'block';
+        }
+    }
+
+    document.getElementById('nextBtn').onclick = () => {
+        window.location.href = 'index.html'; // Redirect to index.html
+    };
+
+    function startGame() {
+        // Hide the "first" message and the "Start" button
+        document.getElementById('first').style.display = 'none'; // Hide the first message
+        document.getElementById('startBtn').style.display = 'none'; // Hide the start button
+
+        bonding = 0;
+        bondingMeter.textContent = "유대감: 0";
+        message.style.display = 'none';
+        retryBtn.style.display = 'none';
+        timeLeft = 30;
+        timerDisplay.textContent = `남은 시간: ${timeLeft}초`;
+        timer = setInterval(countDown, 1000);
+        cat.style.display = 'block'; // Show the cat when the game starts
+    }
+
+    function countDown() {
+        timeLeft--;
+        timerDisplay.textContent = `남은 시간: ${timeLeft}초`;
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            if (bonding < 100) {
+                message.textContent = "앗! 고양이가 도망갑니다. 다시 길들이겠습니까?";
+                message.style.display = 'block';
+                retryBtn.style.display = 'block';
+            }
+            cat.style.display = 'none'; // Hide the cat when time runs out
+        }
+    }
+
+    function startInteraction(type) {
+        switch (type) {
+            case 'food':
+                document.body.style.cursor = "url('fish.png'), auto";
+                document.getElementById("cat").onclick = () => updateBonding(randomBond());
+                break;
+            case 'pet':
+                document.body.style.cursor = "url('hand.png'), auto";
+                let isPetting = false; // Track if the petting action is active
+                let startX, startY;
+                let bondingIncreased = false; // Track if bonding has increased in the current petting action
+
+                document.getElementById("cat").onmousedown = (e) => {
+                    isPetting = true; // Start petting
+                    bondingIncreased = false; // Reset bonding increase flag
+                    startX = e.clientX; // Record initial position
+                    startY = e.clientY;
+                };
+
+                document.getElementById("cat").onmouseup = () => {
+                    isPetting = false; // Stop petting when mouse is released
+                };
+
+                document.addEventListener("mousemove", (e) => {
+                    if (isPetting) {
+                        const distanceX = Math.abs(e.clientX - startX);
+                        const distanceY = Math.abs(e.clientY - startY);
+                        const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+                        if (distance > 10 && !bondingIncreased) { // Check if moved more than 10px and bonding not increased yet
+                            updateBonding(randomBond()); // Increase bonding by a random amount
+                            bondingIncreased = true; // Mark that bonding has been increased
+                        }
+                    }
+                });
+                break;
+            case 'play':
+                document.body.style.cursor = "url('play.png'), auto";
+                document.getElementById("cat").onclick = () => updateBonding(randomBond());
+
+                // Mouse move event for the cat's pupils
+                document.addEventListener("mousemove", (e) => {
+                    const leftEye = document.getElementById("left-eye");
+                    const rightEye = document.getElementById("right-eye");
+                    const leftPupil = document.getElementById("left-pupil");
+                    const rightPupil = document.getElementById("right-pupil");
+
+                    const eyeRect = leftEye.getBoundingClientRect();
+                    const eyeCenterX = eyeRect.left + eyeRect.width / 2;
+                    const eyeCenterY = eyeRect.top + eyeRect.height / 2;
+
+                    const dx = e.clientX - eyeCenterX;
+                    const dy = e.clientY - eyeCenterY;
+                    const angle = Math.atan2(dy, dx);
+                    const distance = Math.min(10, Math.sqrt(dx * dx + dy * dy));
+
+                    leftPupil.style.transform = `translate(${distance * Math.cos(angle)}px, ${distance * Math.sin(angle)}px)`;
+                    rightPupil.style.transform = `translate(${distance * Math.cos(angle)}px, ${distance * Math.sin(angle)}px)`;
+
+                    // Check if the pupils have moved more than 20px
+                    if (Math.sqrt(dx * dx + dy * dy) > 20 && lastPupilMovement <= 20) {
+                        updateBonding(1); // Increase bonding by 1
+                    }
+
+                    // Update last movement distance
+                    lastPupilMovement = Math.sqrt(dx * dx + dy * dy); // Store the current movement distance
+                });
+                break;
+        }
+    }
+
+    function randomBond() {
+        return Math.floor(Math.random() * 5) + 1;
+    }
+
+    // Start the game when the "Start" button is clicked
+    document.getElementById('startBtn').onclick = startGame; // Ensure this line is present to bind the button
+</script>
+
+
+</body>
+</html>
+
+

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>도둑 이야기 2</title>
+    <style type="text/css">
+        @font-face {
+            font-family: 'UhBeeSe_hyun';
+            src: url('https://gcore.jsdelivr.net/gh/projectnoonnu/noonfonts_five@.2.0/UhBeeSe_hyun.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+            font-family: 'UhBeeSe_hyun', sans-serif;
+            overflow: hidden;
+            background-color: #f0f0f0;
+            position: relative;
+        }
+
+        #text1, #text2, #text3{
+            font-size: 36px;
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            color: black;
+            display: none;
+            z-index: 2;
+        }
+    #text4, #text5, #text6 {
+     font-size: 36px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: black;
+    background-color: white;
+    display: none;
+    z-index: 2;
+    padding: 10px 50px;
+    text-align: center;
+    width: auto;
+    white-space: nowrap;
+    border-radius: 10px;
+    border-radius: 50px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    }
+
+
+
+        #text1 { top: 10%; }
+        #text2 { top: 20%; }
+        #text3 { top: 30%; }
+        #text4 { top: 20%; }
+        #text5 { top: 20%; }
+        #text6 { top: 30%; }
+
+        #catImage {
+            width: 30%;
+            height: auto;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            margin-top: 20%;
+        }
+
+        #catrunImage {
+            width: 30%;
+            position: absolute;
+            z-index: 1;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+        }
+
+        #nameInput {
+            font-size: 20px;
+            padding: 10px 20px;
+            margin: 10px;
+            width: 20%;
+            z-index: 100;
+            display: none;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'UhBeeSe_hyun', sans-serif;
+            border-radius: 50px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        #submitBtn, #nextBtn {
+            font-size: 20px;
+            padding: 10px 20px;
+            width: 10%;
+            z-index: 50;
+            display: none;
+            position: absolute;
+            color: white;
+            background-color: black;
+            border: none;
+            cursor: pointer;
+            border-radius: 50px;
+            font-family: 'UhBeeSe_hyun', sans-serif;
+        }
+
+        #submitBtn {
+            left: 50%;
+            top: 60%;
+            transform: translate(-50%, -50%);
+        }
+
+        #nextBtn {
+            display: none;
+            color: black;
+            background-color: rgba(255,255,255, 0.5);
+            border: none;
+            cursor: pointer;
+            border-radius: 50px;
+            font-family: 'UhBeeSe_hyun', sans-serif;
+            font-size: 2rem;
+            position: absolute;
+            width: 300px;
+            left: 85%;
+            top: 80%;
+            transform: translate(-50%, -50%);
+        }
+
+         #nextBtn:hover {
+            background-color: #e0e0e0; /* Slight hover effect */
+        }
+
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 99;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="text1">고양이..?</div>
+    <div id="text2">내가 고양이를 키운적이 있었나...?</div>
+    <div id="text3">으악!!!! 어디서 들어온 고양이야!!</div>
+    <div id="text4">일단 고양이를 잡아보자!</div>
+    <div id="text5">음.... 이 고양이를 어쩌지...</div>
+    <div id="text6">일단 고양이의 이름을 지어주자!</div>
+    
+    <img id="catImage" src="cat2.png" alt="Cat Image">
+    <img id="catrunImage" src="cat_run.png" alt="Cat Running Image">
+
+    <input type="text" id="nameInput" placeholder="고양이의 이름을 입력하세요">
+    <button id="submitBtn">이름 제출</button>
+
+    <div id="overlay">
+        <button id="nextBtn">다음으로...</button>
+    </div>
+
+    <script>
+        // 게임 자동 시작
+        window.onload = function() {
+            startGame();
+        };
+
+        function startGame() {
+            setTimeout(() => {
+                document.getElementById('text1').style.display = 'block';
+            }, 1000);
+
+            setTimeout(() => {
+                document.getElementById('text2').style.display = 'block';
+            }, 1500);
+
+            setTimeout(() => {
+                document.getElementById('text3').style.display = 'block';
+                document.getElementById('catImage').src = 'cat3.png';
+            }, 4000);
+
+            setTimeout(() => {
+                document.getElementById('text1').style.display = 'none';
+                document.getElementById('text2').style.display = 'none';
+                document.getElementById('text3').style.display = 'none';
+                document.getElementById('catImage').style.display = 'none';
+                document.getElementById('text4').style.display = 'block';
+                document.getElementById('catrunImage').style.display = 'block';
+                moveCat();
+                document.body.style.backgroundImage = "url('1.2.png')";
+                document.body.style.backgroundSize = "cover";
+            }, 6000);
+
+            let gameOver = false;
+            let cat = document.getElementById('catrunImage');
+
+            function moveCat() {
+                const containerWidth = window.innerWidth - cat.offsetWidth;
+                const containerHeight = window.innerHeight - cat.offsetHeight;
+
+                function animate() {
+                    if (gameOver) return;
+
+                    const mouseX = mousePos.x;
+                    const mouseY = mousePos.y;
+
+                    const currentLeft = parseFloat(cat.style.left) || Math.random() * containerWidth;
+                    const currentTop = parseFloat(cat.style.top) || Math.random() * containerHeight;
+
+                    const distanceX = mouseX - currentLeft;
+                    const distanceY = mouseY - currentTop;
+                    const distance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
+
+                    if (distance < 2000) {
+                        const angle = Math.atan2(distanceY, distanceX);
+                        const speed = 10;
+                        const newLeft = currentLeft - Math.cos(angle) * speed;
+                        const newTop = currentTop - Math.sin(angle) * speed;
+
+                        cat.style.left = Math.max(0, Math.min(newLeft, containerWidth)) + 'px';
+                        cat.style.top = Math.max(0, Math.min(newTop, containerHeight)) + 'px';
+                    } else {
+                        const newLeft = currentLeft + (Math.random() - 0.5) * 2;
+                        const newTop = currentTop + (Math.random() - 0.5) * 2;
+
+                        cat.style.left = Math.max(0, Math.min(newLeft, containerWidth)) + 'px';
+                        cat.style.top = Math.max(0, Math.min(newTop, containerHeight)) + 'px';
+                    }
+
+                    requestAnimationFrame(animate);
+                }
+                animate();
+            }
+
+            const mousePos = { x: 0, y: 0 };
+            document.addEventListener('mousemove', (event) => {
+                mousePos.x = event.clientX;
+                mousePos.y = event.clientY;
+            });
+
+            cat.addEventListener('click', () => {
+                gameOver = true;
+                document.getElementById('text4').textContent = '고양이를 잡았다!';
+
+                setTimeout(() => {
+                    document.getElementById('text4').style.display = 'none';
+                    document.getElementById('text5').style.display = 'block';
+
+                    setTimeout(() => {
+                        document.getElementById('text5').style.display = 'none';
+                        document.getElementById('text6').style.display = 'block';
+                        document.getElementById('nameInput').style.display = 'block';
+                        document.getElementById('submitBtn').style.display = 'block';
+                    }, 2000);
+                }, 1000);
+            });
+
+            // 이름 입력 후 다음 페이지로 이동하는 함수
+            document.getElementById('submitBtn').addEventListener('click', () => {
+                const catName = document.getElementById('nameInput').value;
+                if (catName) {
+                    alert(`고양이의 이름은 "${catName}"입니다!`);
+                    document.getElementById('nameInput').style.display = 'none';
+                    document.getElementById('submitBtn').style.display = 'none';
+                    document.getElementById('overlay').style.display = 'flex';
+                    document.getElementById('nextBtn').style.display = 'block';
+
+                    // 다음 버튼 클릭 시 cat3.html에 이름 전달
+                    document.getElementById('nextBtn').onclick = function() {
+                        window.location.href = `cat3.html?name=${encodeURIComponent(catName)}`;
+                    };
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
+
+
